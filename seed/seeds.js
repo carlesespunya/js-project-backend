@@ -6,24 +6,24 @@ const User = require("../models/User.model")
 
 const users = [
    {
-      email: 'test1@example.com ',
-      password: '12345T',
+      email: 'test1@example.com',
+      password: '12345Tm',
       name: 'test1',
       userName: 'test1',
       placesIds: [],
       image: "https://i.imgur.com/sFXx9ni.jpg"
    },
    {
-      email: 'test2@example.com ',
-      password: '12345T',
+      email: 'test2@example.com',
+      password: '12345Tm',
       name: 'test2',
       userName: 'test2',
       placesIds: [],
       image: "https://i.imgur.com/4csktko.jpg"
    },
    {
-      email: 'test3@example.com ',
-      password: '12345T',
+      email: 'test3@example.com',
+      password: '12345Tm',
       name: 'test3',
       userName: 'test3',
       placeId: [],
