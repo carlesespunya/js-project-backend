@@ -5,11 +5,11 @@ const Favorite = require("../models/Favorite");
 const mongoose = require('mongoose')
 
 router.get("/favorites" , isAuthenticated, async (req, res) => {
-    const userId = req.session.currentUser
+    const userId = req.payload
       try {
           const dbFavorites = await Favorite.find({user: userId}).populate("place")
           console.log(dbFavorites)
-          res.jason("places/placesFavorites" , { dbFavorites })
+          res.json(dbFavorites)
       } catch (error) {
           console.log(error)
       }
