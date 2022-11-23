@@ -24,10 +24,11 @@ app.use("/api", userRoutes);
 const authRoutes = require("./routes/auth.routes");
 app.use("/api/v1/auth", authRoutes);
 
-
 const placeRoutes = require("./routes/places.routes");
 app.use("/api", placeRoutes);
 
+const petRoutes = require("./routes/pet.routes");
+app.use("/api", petRoutes);
 
 const favoriteRoutes = require("./routes/favorite.routes");
 app.use("/api", favoriteRoutes);
