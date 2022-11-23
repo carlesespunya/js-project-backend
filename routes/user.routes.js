@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 const express = require('express')
 const router = express.Router();
 const User = require("../models/User.model")
-<<<<<<< HEAD
+const Place = require("../models/Place.model");
 const fileUploader = require('../config/cloudinary.config');
 const {isAuthenticated} = require("../middleware/jwt.middleware")
 
@@ -28,9 +28,7 @@ router.post("/user-profile/edit-photo", fileUploader.single('image'), isAuthenti
          res.json(err)
      }
    })
-=======
-const Place = require("../models/Place.model");
-const { isAuthenticated } = require('../middleware/jwt.middleware')
+
 
 
 
@@ -53,6 +51,6 @@ router.get ("/profile/my-places", isAuthenticated, async (req, res, next) => {
         console.log(err)
     }
 })
->>>>>>> ab6823aaec5e5ee8b7af5061c7ef19248155343b
+
 
 module.exports = router
