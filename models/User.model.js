@@ -28,6 +28,7 @@ const userSchema = new Schema(
     ,
     image: {
       type: String,
+      default: ""
     },
     reviewId: 
     [{type: Schema.Types.ObjectId, ref: 'Review'}], 
