@@ -25,8 +25,9 @@ const authRoutes = require("./routes/auth.routes");
 app.use("/api/v1/auth", authRoutes);
 
 
-// const placeRoutes = require("./routes/places.routes");
-// app.use("/api", placeRoutes);
+const placeRoutes = require("./routes/places.routes");
+app.use("/api", placeRoutes);
+
 
 const favoriteRoutes = require("./routes/favorite.routes");
 app.use("/api", favoriteRoutes);
