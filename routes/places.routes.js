@@ -45,12 +45,22 @@ router.post("/addPlace", isAuthenticated, fileUploader.array('images'), async (r
             next(err);
         }
     }
+})
 
     // router.get("/favoritesPlaces", isAuthenticated, async (req, res) => {
     //     const UserFav = await User.findById(req.payload._id).populate("favourite")
     //     console.log(req.payload)
     //     res.json(UserFav)
     // });
+
+    router.get("/places", async (req, res) => {
+        try {
+            const placeDB = await Place.find()
+            res.json(placeDB)
+        } catch (error) {
+            res.json(error)
+        }
+    })
 
     router.get("/places/:placeId", async (req, res) => {
         const { placeId } = req.params
@@ -84,14 +94,6 @@ router.post("/addPlace", isAuthenticated, fileUploader.array('images'), async (r
     })
 
 
-    router.get("/places", async (req, res) => {
-        try {
-            const placeDB = await Place.find()
-            res.json(placeDB)
-        } catch (error) {
-            res.json(error)
-        }
-    })
 
 
     router.get("/addReview/:placeId", isAuthenticated, (req, res) => {
@@ -119,7 +121,6 @@ router.post("/addPlace", isAuthenticated, fileUploader.array('images'), async (r
         }
     })
 
-})
 
 
 
