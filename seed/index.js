@@ -7,7 +7,7 @@ const User = require("../models/User.model")
 const users = [
    {
       email: 'test1@example.com ',
-      password: '123456',
+      password: '12345T',
       name: 'test1',
       userName: 'test1',
       placesIds: [],
@@ -15,7 +15,7 @@ const users = [
    },
    {
       email: 'test2@example.com ',
-      password: '123456',
+      password: '12345T',
       name: 'test2',
       userName: 'test2',
       placesIds: [],
@@ -23,7 +23,7 @@ const users = [
    },
    {
       email: 'test3@example.com ',
-      password: '123456',
+      password: '12345T',
       name: 'test3',
       userName: 'test3',
       placeId: [],
