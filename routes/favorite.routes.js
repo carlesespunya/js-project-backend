@@ -4,6 +4,7 @@ const router = express.Router();
 const Favorite = require("../models/Favorite");
 const mongoose = require('mongoose')
 
+
 router.get("/favorites" , isAuthenticated, async (req, res) => {
     const userId = req.payload
       try {
@@ -28,3 +29,4 @@ router.get("/favorites" , isAuthenticated, async (req, res) => {
   
   
   module.exports = router
+

@@ -4,32 +4,28 @@ const fileUploader = require('../config/cloudinary.config');
 const User = require("../models/User.model")
 const Place = require("../models/Place.model")
 const Review = require("../models/Review.model")
+const mongoose = require("mongoose");
 
 const { isAuthenticated } = require("../middleware/jwt.middleware.js");
 const { json } = require("express");
 
 
 
-router.post("/addPlace", isAuthenticated, fileUploader.array('images'), async (req, res) => {
-    const { name, address, description, picture, Beach, Restaurant, Cafeteria, Museum, Others, socialMedia } = req.body;
-    console.log(req)
-    const pictures = { imagesUrl: [] }
+router.post("/addPlace", isAuthenticated, fileUploader.array('pictures'), async (req, res) => {
+    const { name, address, description, type, socialMedia } = req.body;
+    console.log(req.file)
+    const pictures = [] 
     if (req.file) {
-        pictures.imagesUrl.push(req.file.path)
+        pictures.push(req.file.path)
     } else if (req.files) {
         req.files.forEach((file) => {
-            pictures.imagesUrl.push(file.path)
+            pictures.push(file.path)
         })
     }
-    const type = {}
-    if (Beach) { type.Beach = true }
-    if (Restaurant) { type.Restaurant = true }
-    if (Cafeteria) { type.Cafeteria = true }
-    if (Museum) { type.Museum = true }
-    if (Others) { type.Others = Others }
-
+  
     try {
-        const newPlace = await Place.create({ name, address, description, pictures, type, socialMedia })
+        const newPlace = await Place.create({ name, address, description, pictures, type, socialMedia, User: req.payload._id})
+        const userUpdated = await User.findByIdAndUpdate(req.payload._id, { $push: { createdPlaceId: newPlace._id } })
         res.json(newPlace)
 
     } catch (err) {
@@ -38,7 +34,7 @@ router.post("/addPlace", isAuthenticated, fileUploader.array('images'), async (r
         } else if (err.code === 11000) {
             res.status(500).json({
                 errorMessage:
-                    "The name of the spot and the coordinates should be unique",
+                    "The name of the place and the address should be unique",
                 layout: false
             });
         } else {
@@ -75,9 +71,17 @@ router.post("/addPlace", isAuthenticated, fileUploader.array('images'), async (r
     router.put("/places/:placeId", isAuthenticated, async (req, res) => {
         const { placeId } = req.params
         const { placeUpdate } = req.body
+        console.log(req.payload.email)
+
         try {
-            const placeDB = await Place.findByIdAndUpdate(placeId, placeUpdate)
-            res.json(placeDB)
+            const placeDb = await Place.findById(placeId)
+            if (placeDb.User._id === req.payload._id){
+                const placeUpdatedDB = await Place.findByIdAndUpdate(placeId, placeUpdate)
+                res.json(placeUpdatedDB)
+            } else{
+                res.json("You can not update this place")
+            }
+            
         } catch (error) {
             res.json(error)
         }
@@ -86,8 +90,13 @@ router.post("/addPlace", isAuthenticated, fileUploader.array('images'), async (r
     router.delete("/places/:placeId", isAuthenticated, async (req, res) => {
         const { placeId } = req.params
         try {
-            const placeDeleted = await Project.findByIdAndRemove(placeId)
-            res.json({ message: `project with id ${placeDeleted._id} was deleted` })
+            const placeDb = await Place.findById(placeId)
+            if (placeDb.User._id === req.payload._id){
+                const placeDeleted = await Project.findByIdAndRemove(placeId)
+                res.json({ message: `project with id ${placeDeleted._id} was deleted` })
+            } else{
+                res.json("You can not delete this place")
+            }
         } catch (error) {
             res.json(error)
         }
