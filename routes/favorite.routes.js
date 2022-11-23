@@ -3,6 +3,7 @@ const { isAuthenticated } = require('../middleware/jwt.middleware');
 const router = express.Router();
 const Favorite = require("../models/Favorite");
 const mongoose = require('mongoose')
+const fileUploader = require('../config/cloudinary.config');
 
 router.get("/favorites" , isAuthenticated, async (req, res) => {
     const userId = req.payload
