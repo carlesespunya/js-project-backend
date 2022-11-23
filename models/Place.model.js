@@ -36,9 +36,11 @@ const placeSchema = new Schema({
     },
     User: { type: Schema.Types.ObjectId, ref: 'User' },
     Review: [{ type: Schema.Types.ObjectId, ref: 'Review' }],
-    },
-    {
-        timestamps: true,
+
+    favorite: {
+        type: Schema.Types.ObjectId, ref:"Favorite",
+      },
+
     }
 );
 
