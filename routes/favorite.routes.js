@@ -1,15 +1,15 @@
 const express = require('express');
-
-const isLoggedIn = require('../middleware/isLoggedIn');
+const { isAuthenticated } = require('../middleware/jwt.middleware');
 const router = express.Router();
 const Favorite = require("../models/Favorite");
+const mongoose = require('mongoose')
 
-router.get("/favorites" , isLoggedIn, async (req, res) => {
+router.get("/favorites" , isAuthenticated, async (req, res) => {
     const userId = req.session.currentUser
       try {
           const dbFavorites = await Favorite.find({user: userId}).populate("place")
           console.log(dbFavorites)
-          res.render("places/placesFavorites" , { dbFavorites })
+          res.jason("places/placesFavorites" , { dbFavorites })
       } catch (error) {
           console.log(error)
       }
