@@ -44,7 +44,7 @@ router.get("/profile", isAuthenticated, async (req, res, next) => {
 router.get ("/profile/my-places", isAuthenticated, async (req, res, next) => {
     const currentUser = req.payload
     try{
-        const place = await Place.find({user: currentUser}).populate("place")
+        const place = await Place.find({User: currentUser._id})
         console.log(place)
         res.json(place);
     } catch(err){
