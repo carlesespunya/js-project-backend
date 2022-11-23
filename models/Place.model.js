@@ -17,18 +17,18 @@ const placeSchema = new Schema({
         required: false,
         trim: true
     },
-    picture: {
-        timagesUrl: [String],
+    pictures: {
+        type: [String],
         required: false,
     },
     type: {
-        type: Object,
+        type: String,
         required: true,
-        Beach: { type: Boolean },
-        Restaurant: { type: Boolean },
-        Cafeteria: { type: Boolean },
-        Museum: { type: Boolean },
-        Others: {type: String}
+        enum : ['Beach', 'Restaurant', 'Cafeteria', 'Museum', 'Cafeteria', 'Others']
+    },
+    typeOthers: {
+        type: String,
+        required: false,
     },
     socialMedia: {
         type: [String],

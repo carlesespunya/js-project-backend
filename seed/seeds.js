@@ -6,9 +6,9 @@ const User = require("../models/User.model")
 
 const users = [
    {
-      email: 'test1@example.com ',
+      email: 'test1@example.com',
       password: '$2b$10$G.lg.0IzCFXikF69XTUh1uX3PjRzObnc5sJ13ManJl4k9M7LkaqpW',
-      // 12345Tb
+      // 12345Tmb
       name: 'test1',
       userName: 'test1',
       placesIds: [],
