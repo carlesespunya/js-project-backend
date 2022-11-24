@@ -23,8 +23,7 @@ const userSchema = new Schema(
       required: [true, "User name is required."],
     },
     createdPlaceId:
-
-      [{ type: Schema.Types.ObjectId, ref: 'Places' }]
+      [{type: Schema.Types.ObjectId, ref: 'Place'}]
     ,
     image: {
       type: String,
