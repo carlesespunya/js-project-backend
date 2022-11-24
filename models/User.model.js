@@ -24,7 +24,9 @@ const userSchema = new Schema(
     },
     createdPlaceId:
 
-      [{ type: Schema.Types.ObjectId, ref: 'Places' }]
+
+      [{type: Schema.Types.ObjectId, ref: 'Place'}]
+
     ,
     image: {
       type: String,
