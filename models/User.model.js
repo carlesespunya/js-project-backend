@@ -22,23 +22,21 @@ const userSchema = new Schema(
       type: String,
       required: [true, "User name is required."],
     },
-    createdPlaceId: 
-
+    createdPlaceId:
       [{type: Schema.Types.ObjectId, ref: 'Place'}]
     ,
     image: {
       type: String,
       default: ""
     },
-    reviewId: 
-    [{type: Schema.Types.ObjectId, ref: 'Review'}], 
-    
-    favorite: {
-      type: Schema.Types.ObjectId, ref:"Favorite",
-    },
+    reviewId:
+      [{ type: Schema.Types.ObjectId, ref: 'Review' }],
 
+    favorite: {
+      type: Schema.Types.ObjectId, ref: "Favorite",
+    },
     pet: {
-      type: Schema.Types.ObjectId, ref:"Pet",
+      type: Schema.Types.ObjectId, ref: "Pet",
     },
   },
   {
