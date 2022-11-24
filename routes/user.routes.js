@@ -11,7 +11,7 @@ router.get("/user-profile/:userId", async (req, res) => {
     const { userId } = req.params
     
     try {
-        const userProfile = await User.findById(userId)
+        const userProfile = await User.findById(userId).populate("createdPlaceId")
         res.json(userProfile)
     } catch (error) {
         res.json("no users")
