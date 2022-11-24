@@ -20,9 +20,7 @@ router.get("/user-profile/:userId", async (req, res) => {
 })
 
 router.post("/user-profile/edit-photo", fileUploader.single('image'), isAuthenticated, async (req, res) => {
-    const user = req.payload
-
-]
+    const user = req.payloads
     try {
         const newPhoto = await User.findByIdAndUpdate(user._id, { image: req.file.path })
         res.json(newPhoto)

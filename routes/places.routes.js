@@ -12,9 +12,9 @@ const { json } = require("express");
 
 
 router.post("/addPlace", isAuthenticated, fileUploader.array('pictures'), async (req, res) => {
-    const { name, address, description, type, socialMedia } = req.body;
+    const { name, address, description, type, socialMedia, typeOther } = req.body;
     console.log(req.file)
-    const pictures = [] 
+    const pictures = []
     if (req.file) {
         pictures.push(req.file.path)
     } else if (req.files) {
@@ -22,9 +22,9 @@ router.post("/addPlace", isAuthenticated, fileUploader.array('pictures'), async 
             pictures.push(file.path)
         })
     }
-  
+
     try {
-        const newPlace = await Place.create({ name, address, description, pictures, type, socialMedia, User: req.payload._id})
+        const newPlace = await Place.create({ name, address, description, pictures, type, socialMedia, User: req.payload._id, typeOthers: typeOther})
         const userUpdated = await User.findByIdAndUpdate(req.payload._id, { $push: { createdPlaceId: newPlace._id } })
         res.json(newPlace)
 
@@ -43,92 +43,104 @@ router.post("/addPlace", isAuthenticated, fileUploader.array('pictures'), async 
     }
 })
 
-    // router.get("/favoritesPlaces", isAuthenticated, async (req, res) => {
-    //     const UserFav = await User.findById(req.payload._id).populate("favourite")
-    //     console.log(req.payload)
-    //     res.json(UserFav)
-    // });
+// router.get("/favoritesPlaces", isAuthenticated, async (req, res) => {
+//     const UserFav = await User.findById(req.payload._id).populate("favourite")
+//     console.log(req.payload)
+//     res.json(UserFav)
+// });
 
-    router.get("/places", async (req, res) => {
-        try {
-            const placeDB = await Place.find()
-            res.json(placeDB)
-        } catch (error) {
-            res.json(error)
+router.get("/places", async (req, res) => {
+    try {
+        const placeDB = await Place.find()
+        res.json(placeDB)
+    } catch (error) {
+        res.json(error)
+    }
+})
+
+router.get("/places/:placeId", async (req, res) => {
+    const { placeId } = req.params
+    try {
+        const placeDB = await Place.findById(placeId).populate("User", "Review")
+        res.json(placeDB)
+    } catch (error) {
+        res.json(error)
+    }
+})
+
+router.put("/places/:placeId", isAuthenticated, async (req, res) => {
+    const { placeId } = req.params
+    const { placeUpdate } = req.body
+    console.log(req.payload.email)
+
+    try {
+        const placeDb = await Place.findById(placeId)
+        if (placeDb.User._id === req.payload._id) {
+            const placeUpdatedDB = await Place.findByIdAndUpdate(placeId, placeUpdate)
+            res.json(placeUpdatedDB)
+        } else {
+            res.json("You can not update this place")
         }
-    })
 
-    router.get("/places/:placeId", async (req, res) => {
-        const { placeId } = req.params
-        try {
-            const placeDB = await Place.findById(placeId).populate("User", "Review")
-            res.json(placeDB)
-        } catch (error) {
-            res.json(error)
+    } catch (error) {
+        res.json(error)
+    }
+})
+
+router.delete("/places/:placeId", isAuthenticated, async (req, res) => {
+    const { placeId } = req.params
+    try {
+        const placeDb = await Place.findById(placeId)
+        if (placeDb.User._id === req.payload._id) {
+            const placeDeleted = await Project.findByIdAndRemove(placeId)
+            res.json({ message: `project with id ${placeDeleted._id} was deleted` })
+        } else {
+            res.json("You can not delete this place")
         }
-    })
+    } catch (error) {
+        res.json(error)
+    }
+})
 
-    router.put("/places/:placeId", isAuthenticated, async (req, res) => {
-        const { placeId } = req.params
-        const { placeUpdate } = req.body
-        console.log(req.payload.email)
 
-        try {
-            const placeDb = await Place.findById(placeId)
-            if (placeDb.User._id === req.payload._id){
-                const placeUpdatedDB = await Place.findByIdAndUpdate(placeId, placeUpdate)
-                res.json(placeUpdatedDB)
-            } else{
-                res.json("You can not update this place")
-            }
-            
-        } catch (error) {
-            res.json(error)
+router.get("/map", isAuthenticated, async (req, res) => {
+    try {
+      const spotsDb = await Place.find()
+      const mapCenter = [-3.703339, 40.416729]
+      const mapZoom = 5
+      res.json("map", { layout: false, user: req.payload, spotsDb, mapCenter, mapZoom });
+    } catch (err) {
+      console.log(err)
+    }
+  });
+  
+
+
+
+router.get("/addReview/:placeId", isAuthenticated, (req, res) => {
+    res.json(req.params.placeId)
+});
+
+router.post("/addReview/:placeId", isAuthenticated, async (req, res) => {
+    try {
+        const userSaved = await User.findById(req.payload._id)
+        const placeSaved = await Place.findById(req.params.placeId)
+        const review = {
+            check: body.check,
+            comment: body.comment,
+            place: placeSaved,
+            user: userSaved
         }
-    })
 
-    router.delete("/places/:placeId", isAuthenticated, async (req, res) => {
-        const { placeId } = req.params
-        try {
-            const placeDb = await Place.findById(placeId)
-            if (placeDb.User._id === req.payload._id){
-                const placeDeleted = await Project.findByIdAndRemove(placeId)
-                res.json({ message: `project with id ${placeDeleted._id} was deleted` })
-            } else{
-                res.json("You can not delete this place")
-            }
-        } catch (error) {
-            res.json(error)
-        }
-    })
+        const newReview = await Review.create(review)
+        await Place.findByIdAndUpdate(req.params.placeId, { $push: { Review: newReview._id } });
+        await User.findByIdAndUpdate(req.payload._id, { $push: { reviewId: newReview._id } });
+        res.json(newReview)
 
-
-
-
-    router.get("/addReview/:placeId", isAuthenticated, (req, res) => {
-        res.json(req.params.placeId)
-    });
-
-    router.post("/addReview/:placeId", isAuthenticated, async (req, res) => {
-        try {
-            const userSaved = await User.findById(req.payload._id)
-            const placeSaved = await Place.findById(req.params.placeId)
-            const review = {
-                check: body.check,
-                comment: body.comment,
-                place: placeSaved,
-                user: userSaved
-            }
-
-            const newReview = await Review.create(review)
-            await Place.findByIdAndUpdate(req.params.placeId, { $push: { Review: newReview._id } });
-            await User.findByIdAndUpdate(req.payload._id, { $push: { reviewId: newReview._id } });
-            res.json(newReview)
-           
-        } catch (err) {
-            console.log(err)
-        }
-    })
+    } catch (err) {
+        console.log(err)
+    }
+})
 
 
 
