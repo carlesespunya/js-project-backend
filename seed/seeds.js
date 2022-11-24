@@ -11,7 +11,7 @@ const users = [
       // 12345Tmb
       name: 'test1',
       userName: 'test1',
-      placesIds: [],
+      createdPlaceId: [],
       image: "https://i.imgur.com/sFXx9ni.jpg"
    },
    {
@@ -19,7 +19,7 @@ const users = [
       password: '$2b$10$G.lg.0IzCFXikF69XTUh1uX3PjRzObnc5sJ13ManJl4k9M7LkaqpW',
       name: 'test2',
       userName: 'test2',
-      placesIds: [],
+      createdPlaceId: [],
       image: "https://i.imgur.com/4csktko.jpg"
    },
    {
@@ -27,7 +27,7 @@ const users = [
       password: '$2b$10$G.lg.0IzCFXikF69XTUh1uX3PjRzObnc5sJ13ManJl4k9M7LkaqpW',
       name: 'test3',
       userName: 'test3',
-      placeId: [],
+      createdPlaceId: [],
       image: "https://i.imgur.com/0UeAVae.jpg",
       review: []
    },
@@ -37,7 +37,7 @@ const places = [
 
    {
      name: "Billy Brunch",      
-     type: "Brunch", 
+     type: "Cafeteria", 
      address: "Carrer de Bailèn, 115, 08009 Barcelona ", 
      picture: "https://www.metropoliabierta.com/uploads/s1/19/19/48/6/aperturabilly.jpeg", 
      socialMedia: "https://www.instagram.com/billybrunch/?hl=es",
