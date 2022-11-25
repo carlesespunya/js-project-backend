@@ -4,6 +4,7 @@ const reviewSchema = new Schema(
     {
         check: {
             type: Boolean,
+            required : true,
         },
         comment: {
             type: String,
