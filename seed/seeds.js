@@ -7,27 +7,27 @@ const User = require("../models/User.model")
 const users = [
    {
       email: 'test1@example.com',
-      password: '$2b$10$G.lg.0IzCFXikF69XTUh1uX3PjRzObnc5sJ13ManJl4k9M7LkaqpW',
+      password: '$2b$10$a2YDiiDijLphmQqecAM6Meocvv5l/9AtH/XEwxS5HN/7FEb.LMiLO',
       // 12345Tmb
       name: 'test1',
       userName: 'test1',
-      placesIds: [],
+      createdPlaceId: [],
       image: "https://i.imgur.com/sFXx9ni.jpg"
    },
    {
-      email: 'test2@example.com ',
-      password: '$2b$10$G.lg.0IzCFXikF69XTUh1uX3PjRzObnc5sJ13ManJl4k9M7LkaqpW',
+      email: 'test2@example.com',
+      password: '$2b$10$a2YDiiDijLphmQqecAM6Meocvv5l/9AtH/XEwxS5HN/7FEb.LMiLO',
       name: 'test2',
       userName: 'test2',
-      placesIds: [],
+      createdPlaceId: [],
       image: "https://i.imgur.com/4csktko.jpg"
    },
    {
       email: 'test3@example.com ',
-      password: '$2b$10$G.lg.0IzCFXikF69XTUh1uX3PjRzObnc5sJ13ManJl4k9M7LkaqpW',
+      password: '$2b$10$a2YDiiDijLphmQqecAM6Meocvv5l/9AtH/XEwxS5HN/7FEb.LMiLO',
       name: 'test3',
       userName: 'test3',
-      placeId: [],
+      createdPlaceId: [],
       image: "https://i.imgur.com/0UeAVae.jpg",
       review: []
    },
@@ -37,7 +37,7 @@ const places = [
 
    {
      name: "Billy Brunch",      
-     type: "Brunch", 
+     type: "Cafeteria", 
      address: "Carrer de Bailèn, 115, 08009 Barcelona ", 
      picture: "https://www.metropoliabierta.com/uploads/s1/19/19/48/6/aperturabilly.jpeg", 
      socialMedia: "https://www.instagram.com/billybrunch/?hl=es",

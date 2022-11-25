@@ -7,6 +7,7 @@ const { isAuthenticated } = require('../middleware/jwt.middleware');
 
 const fileUploader = require('../config/cloudinary.config');
 
+
 router.post("/pet-profile/create", fileUploader.single('image'), isAuthenticated, async (req, res) => {
     const { name } = req.body
     
@@ -14,6 +15,7 @@ router.post("/pet-profile/create", fileUploader.single('image'), isAuthenticated
         // const {image} = req.file.path
         const petProfile = await Pet.create({ name,  user: req.payload._id })
         res.json(petProfile)
+
     } catch (error) {
        console.log(error) 
        res.json("problem")
@@ -23,7 +25,7 @@ router.post("/pet-profile/create", fileUploader.single('image'), isAuthenticated
 
 router.get("/pet-profile", isAuthenticated, async (req, res, next) => {
     try {
-        const petsProfiles = await Pet.findById(req.payload.pet._id)
+        const petsProfiles = await Pet.find({user: req.payload._id})
         res.json(petsProfiles);
     } catch (error) {
         res.json(error)
@@ -31,10 +33,8 @@ router.get("/pet-profile", isAuthenticated, async (req, res, next) => {
 })
 
 router.put("/pet-profile/add-photo", fileUploader.single('image'), isAuthenticated, async (req, res) => {
-    const user = req.payload
-    const { name, image } = req.body
     try {
-        const petImage = await Pet.findByIdAndUpdate(req.payload.pet._id, { image: req.file.path })
+        const petImage = await Pet.findByIdAndUpdate({user: req.payload._id}, { image: req.file.path })
         res.json(petImage)
     } catch (error) {
         console.log(error)
