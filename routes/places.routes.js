@@ -8,6 +8,7 @@ const mongoose = require("mongoose");
 
 const { isAuthenticated } = require("../middleware/jwt.middleware.js");
 const { json } = require("express");
+const Favorite = require("../models/Favorite");
 
 
 
@@ -130,7 +131,21 @@ router.post("/addPlace", isAuthenticated, fileUploader.array('pictures'), async 
         }
     })
 
-
-
-
+    router.post("/favorite/:restaurantId",async(req,res) => {
+        const placeId = req.params.placeId   
+        const user = req.payload
+        try{
+            let favoritesDB = await Favorite.find ({place:placeId, user:user._id})
+            if(favoritesDB.length ===0){
+                let newFavorite = await Favorite.create({user:user._id, place:placeId})
+                res.redirect(`/place/${placeId}`)
+        } else {
+            res.redirect(`/place/${placeId}`)
+        }
+    
+    } catch (error) {
+        console.log(error)
+    }   
+    }),
+    
 module.exports = router;
