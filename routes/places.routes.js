@@ -158,18 +158,20 @@ router.post("/addReview/:placeId", isAuthenticated, async (req, res) => {
     }
 })
 
-    router.post("/favorite/:restaurantId",async(req,res) => {
-        const placeId = req.params.placeId   
+    router.post("/favorite/:placeId", isAuthenticated, async  (req,res) => {
+        const place = req.params
+        const placeId = place.placeId
         const user = req.payload
         try{
-            let favoritesDB = await Favorite.find ({place:placeId, user:user._id})
-            if(favoritesDB.length ===0){
-                let newFavorite = await Favorite.create({user:user._id, place:placeId})
-                res.redirect(`/place/${placeId}`)
-        } else {
-            res.redirect(`/place/${placeId}`)
-        }
-    
+            let favoritesDB = await Favorite.find({place:placeId, user:user._id})
+            if(favoritesDB){
+               const deletedFavorite= await Favorite.findOneAndDelete({place:placeId, user:user._id})
+            console.log("DELETED FAVORITE",deletedFavorite)
+            }
+            let newFavorite = await Favorite.create({user:user._id, place:placeId})
+            console.log("TIS IS NEW FAVORITE", newFavorite)   
+            
+            res.json(newFavorite)
     } catch (error) {
         console.log(error)
     }   
