@@ -25,7 +25,7 @@ const placeSchema = new Schema({
     type: {
         type: String,
         required: true,
-        enum : ['Beach', 'Restaurant', 'Cafeteria', 'Museum', 'Cafeteria', 'Others']
+        enum : ['Beach', 'Restaurant', 'Cafeteria', 'Museum', 'Cafeteria', 'Other']
     },
     typeOthers: {
         type: String,
@@ -37,7 +37,6 @@ const placeSchema = new Schema({
     },
     User: { type: Schema.Types.ObjectId, ref: 'User' },
     Review: [{ type: Schema.Types.ObjectId, ref: 'Review' }],
-
     favorite: {
         type: Schema.Types.ObjectId, ref:"Favorite",
       },
