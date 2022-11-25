@@ -7,10 +7,10 @@ const fileUploader = require('../config/cloudinary.config');
 
 
 router.get("/favorites", isAuthenticated, async (req, res) => {
-    const userId = req.payload
+    const user = req.payload
+    const userId = user._id
     try {
         const dbFavorites = await Favorite.find({ user: userId }).populate("place")
-        console.log(dbFavorites)
         res.json(dbFavorites)
     } catch (error) {
         console.log(error)

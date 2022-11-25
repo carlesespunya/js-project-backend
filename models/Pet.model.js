@@ -9,6 +9,8 @@ const petSchema = new Schema(
     },
     image: {
       type: String,
+      default: "https://static.vecteezy.com/system/resources/previews/001/200/036/non_2x/dog-png.png",
+      required: false
     },
     user: 
     {type: Schema.Types.ObjectId, ref: 'User'}, 
