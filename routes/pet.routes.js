@@ -14,7 +14,7 @@ router.post("/pet-profile/create", fileUploader.single('image'), isAuthenticated
 
     try {
         // const {image} = req.file.path
-        const petProfile = await Pet.create({ name,  user: req.payload._id })
+        const petProfile = await Pet.create({ namePet,  user: req.payload._id })
         res.json(petProfile)
 
     } catch (error) {
