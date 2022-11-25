@@ -25,7 +25,7 @@ const placeSchema = new Schema({
     type: {
         type: String,
         required: true,
-        enum : ['Beach', 'Restaurant', 'Cafeteria', 'Museum', 'Cafeteria', 'Other']
+        enum : ['Beach', 'Restaurant', 'Museum', 'Cafeteria', 'Other']
     },
     typeOthers: {
         type: String,
