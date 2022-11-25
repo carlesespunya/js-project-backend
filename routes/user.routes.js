@@ -39,7 +39,7 @@ router.get("/profile", isAuthenticated, async (req, res, next) => {
 
         const thisUser = await User.findById(currentUser._id).populate("createdPlaceId", "favorite", "Pet")
 
-        res.json(thisUser);
+        res.json(thisUser.createdPlaceId);
 
     } catch(err){
         console.log(err)
