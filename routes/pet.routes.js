@@ -7,17 +7,18 @@ const { isAuthenticated } = require('../middleware/jwt.middleware');
 
 const fileUploader = require('../config/cloudinary.config');
 
-router.post("/pet-profile/create", fileUploader.single('image'), isAuthenticated, async (req, res, next) => {
-    let { namePet, image } = req.body
-    image = req.file.path
+
+router.post("/pet-profile/create", fileUploader.single('image'), isAuthenticated, async (req, res) => {
+    const { name } = req.body
     
-    console.log(image)
     try {
-        const petProfile = await Pet.create( {namePet, image, user: req.payload._id } )
-        const userDb = await User.findByIdAndUpdate(req.payload._id, { $push: { pet: petProfile._id } });
-        res.json(petProfile);
+        // const {image} = req.file.path
+        const petProfile = await Pet.create({ name,  user: req.payload._id })
+        res.json(petProfile)
+
     } catch (error) {
-        res.json(error)
+       console.log(error) 
+       res.json("problem")
     }
 })
 
