@@ -11,7 +11,10 @@ router.get("/user-profile/:userId", async (req, res) => {
 
     try {
 
-        const userProfile = await User.findById(userId).populate("createdPlaceId")
+        const userProfile = await User.findById(userId).populate(
+          "createdPlaceId",
+          "pet"
+        );
 
         res.json(userProfile)
     } catch (error) {
@@ -35,11 +38,9 @@ router.post("/user-profile/edit-photo", fileUploader.single('image'), isAuthenti
 router.get("/profile", isAuthenticated, async (req, res, next) => {
     const currentUser = req.payload
     try{
-
-
-        const thisUser = await User.findById(currentUser._id).populate("createdPlaceId")
-        console.log(thisUser.createdPlaceId)
-        res.json(thisUser.createdPlaceId);
+        const thisUser = await User.findById(currentUser._id).populate("createdPlaceId pet")
+        console.log(thisUser)
+        res.json(thisUser);
 
     } catch(err){
         console.log(err)
