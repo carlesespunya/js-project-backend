@@ -10,6 +10,7 @@ router.get("/favorites", isAuthenticated, async (req, res) => {
     const user = req.payload
     const userId = user._id
     try {
+        console.log("BE requesting favorites for " + userId)
         const dbFavorites = await Favorite.find({ user: userId }).populate("place")
         res.json(dbFavorites)
     } catch (error) {
@@ -18,11 +19,12 @@ router.get("/favorites", isAuthenticated, async (req, res) => {
 })
 
 
-router.post('/favorites/:favoriteId/delete', async (req, res) => {
+router.delete('/favorites/:favoriteId', async (req, res) => {
     const favoriteId = req.params.favoriteId
     try {
-        const dbFavorite = await Favorite.findOneAndDelete({ favoriteId })
-        res.redirect('/favorites')
+        console.log(favoriteId)
+        const dbFavorites = await Favorite.findOneAndDelete({ _id: favoriteId })
+        res.json(dbFavorites)
     } catch (error) {
         console.log(error)
     }
