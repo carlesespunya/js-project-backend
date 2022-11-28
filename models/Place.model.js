@@ -47,3 +47,5 @@ const placeSchema = new Schema({
 const Place = model("Place", placeSchema);
 
 module.exports = Place;
+
+// const apiMap = "AIzaSyCkcywzbIz_vlwGJtBK8AmiesinG8aXAIU"

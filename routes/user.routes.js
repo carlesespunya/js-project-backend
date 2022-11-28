@@ -26,6 +26,7 @@ router.post("/user-profile/edit-photo", fileUploader.single('image'), isAuthenti
 
     const user = req.payload
 
+
     try {
         const newPhoto = await User.findByIdAndUpdate(user._id, { image: req.file.path })
         res.json(newPhoto)
@@ -38,9 +39,11 @@ router.post("/user-profile/edit-photo", fileUploader.single('image'), isAuthenti
 router.get("/profile", isAuthenticated, async (req, res, next) => {
     const currentUser = req.payload
     try{
+
         const thisUser = await User.findById(currentUser._id).populate("createdPlaceId pet")
         console.log(thisUser)
         res.json(thisUser);
+
 
     } catch(err){
         console.log(err)
