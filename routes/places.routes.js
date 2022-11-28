@@ -78,8 +78,9 @@ router.get("/places", async (req, res) => {
 
 router.get("/places/:placeId", async (req, res) => {
     const { placeId } = req.params
+
     try {
-        const placeDB = await Place.findById(placeId).populate("User", "Review")
+        const placeDB = await Place.findById(placeId).populate("User Review")
         res.json(placeDB)
     } catch (error) {
         res.json(error)
@@ -141,15 +142,21 @@ router.post("/addReview/:placeId", isAuthenticated, async (req, res) => {
     try {
         const userSaved = await User.findById(req.payload._id)
         const placeSaved = await Place.findById(req.params.placeId)
+        const reviewFind = await Review.find({user: req.payload._id, place: req.params.placeId })
+        let review = {}
+        if (!reviewFind) {
+            return
+        }
+
         if (req.body.comment){
-            const review = {
+            review = {
                 check: req.body.check,
                 comment: req.body.comment,
                 place: placeSaved,
                 user: userSaved
             }
         }else {
-            const review = {
+            review = {
                 check: req.body.check,
                 place: placeSaved,
                 user: userSaved
