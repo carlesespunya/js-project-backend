@@ -141,13 +141,21 @@ router.post("/addReview/:placeId", isAuthenticated, async (req, res) => {
     try {
         const userSaved = await User.findById(req.payload._id)
         const placeSaved = await Place.findById(req.params.placeId)
-        const review = {
-            check: body.check,
-            comment: body.comment,
-            place: placeSaved,
-            user: userSaved
+        if (req.body.comment){
+            const review = {
+                check: req.body.check,
+                comment: req.body.comment,
+                place: placeSaved,
+                user: userSaved
+            }
+        }else {
+            const review = {
+                check: req.body.check,
+                place: placeSaved,
+                user: userSaved
+            }
         }
-
+       
         const newReview = await Review.create(review)
         await Place.findByIdAndUpdate(req.params.placeId, { $push: { Review: newReview._id } });
         await User.findByIdAndUpdate(req.payload._id, { $push: { reviewId: newReview._id } });
