@@ -20,7 +20,7 @@ const Favorite = require("../models/Favorite");
 // } else if (req.files) {
 //     req.files.forEach((file) => {
 //         pictures.push(file.path)
-//     })
+//     })     
 // }
 // try {
 //     res.json(pictures)
@@ -184,7 +184,7 @@ router.post("/addReview/:placeId", isAuthenticated, async (req, res) => {
             console.log("DELETED FAVORITE",deletedFavorite)
             }
             let newFavorite = await Favorite.create({user:user._id, place:placeId})
-            console.log("TIS IS NEW FAVORITE", newFavorite)   
+            console.log("THIS IS NEW FAVORITE", newFavorite)   
             
             res.json(newFavorite)
     } catch (error) {
