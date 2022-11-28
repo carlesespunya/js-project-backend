@@ -18,7 +18,7 @@ router.get("/favorites", isAuthenticated, async (req, res) => {
 })
 
 
-router.delete('/favorites/:favoriteId', async (req, res) => {
+router.delete('/favorites/:favoriteId', isAuthenticated,async (req, res) => {
     const favoriteId = req.params.favoriteId
     try {
         const dbFavorites = await Favorite.findOneAndDelete({ _id: favoriteId })
