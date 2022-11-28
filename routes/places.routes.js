@@ -54,7 +54,7 @@ router.get("/places", async (req, res) => {
 router.get("/places/:placeId", async (req, res) => {
     const { placeId } = req.params
     try {
-        const placeDB = await Place.findById(placeId).populate("User", "Review")
+        const placeDB = await Place.findById(placeId).populate("User Review")
         res.json(placeDB)
     } catch (error) {
         res.json(error)
