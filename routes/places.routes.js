@@ -10,29 +10,10 @@ const { isAuthenticated } = require("../middleware/jwt.middleware.js");
 const { json } = require("express");
 const Favorite = require("../models/Favorite");
 
-// router.post ("/addPicture", fileUploader.array('pictures') , async (req, res) => {
-
-// console.log(req.body)
-
-// const pictures = []
-// if (req.file) {
-//     pictures.push(req.file.path)
-// } else if (req.files) {
-//     req.files.forEach((file) => {
-//         pictures.push(file.path)
-//     })     
-// }
-// try {
-//     res.json(pictures)
-// }catch (err){
-//     console.log(err)
-// }
-// })
 
 router.post("/addPlace", isAuthenticated, fileUploader.array('pictures'), async (req, res) => {
     const { name, address, description, type, socialMedia, typeOther } = req.body;
     const pictures = []
-
     if (req.file) {
         pictures.push(req.file.path)
     } else if (req.files) {
@@ -42,7 +23,7 @@ router.post("/addPlace", isAuthenticated, fileUploader.array('pictures'), async 
     }
 
     try {
-        const newPlace = await Place.create({ name, address, description, pictures, type, socialMedia, User: req.payload._id, typeOthers: typeOther })
+        const newPlace = await Place.create({ name, address, description, pictures, type, socialMedia, User: req.payload._id, typeOthers: typeOther})
         const userUpdated = await User.findByIdAndUpdate(req.payload._id, { $push: { createdPlaceId: newPlace._id } })
         res.json(newPlace)
 
@@ -61,12 +42,6 @@ router.post("/addPlace", isAuthenticated, fileUploader.array('pictures'), async 
     }
 })
 
-// router.get("/favoritesPlaces", isAuthenticated, async (req, res) => {
-//     const UserFav = await User.findById(req.payload._id).populate("favourite")
-//     console.log(req.payload)
-//     res.json(UserFav)
-// });
-
 router.get("/places", async (req, res) => {
     try {
         const placeDB = await Place.find()
@@ -78,9 +53,8 @@ router.get("/places", async (req, res) => {
 
 router.get("/places/:placeId", async (req, res) => {
     const { placeId } = req.params
-
     try {
-        const placeDB = await Place.findById(placeId).populate("User Review")
+        const placeDB = await Place.findById(placeId).populate("User", "Review")
         res.json(placeDB)
     } catch (error) {
         res.json(error)
@@ -90,8 +64,6 @@ router.get("/places/:placeId", async (req, res) => {
 router.put("/places/:placeId", isAuthenticated, async (req, res) => {
     const { placeId } = req.params
     const { placeUpdate } = req.body
-    console.log(req.payload.email)
-
     try {
         const placeDb = await Place.findById(placeId)
         if (placeDb.User._id === req.payload._id) {
@@ -124,14 +96,16 @@ router.delete("/places/:placeId", isAuthenticated, async (req, res) => {
 
 router.get("/map", isAuthenticated, async (req, res) => {
     try {
-        const spotsDb = await Place.find()
-        const mapCenter = [-3.703339, 40.416729]
-        const mapZoom = 5
-        res.json("map", { layout: false, user: req.payload, spotsDb, mapCenter, mapZoom });
+      const spotsDb = await Place.find()
+      const mapCenter = [-3.703339, 40.416729]
+      const mapZoom = 5
+      res.json("map", { layout: false, user: req.payload, spotsDb, mapCenter, mapZoom });
     } catch (err) {
-        console.log(err)
+      console.log(err)
     }
-});
+  });
+  
+
 
 
 router.get("/addReview/:placeId", isAuthenticated, (req, res) => {
@@ -173,23 +147,24 @@ router.post("/addReview/:placeId", isAuthenticated, async (req, res) => {
     }
 })
 
-    router.post("/favorite/:placeId", isAuthenticated, async  (req,res) => {
-        const place = req.params
-        const placeId = place.placeId
-        const user = req.payload
-        try{
-            let favoritesDB = await Favorite.find({place:placeId, user:user._id})
-            if(favoritesDB){
-               const deletedFavorite= await Favorite.findOneAndDelete({place:placeId, user:user._id})
-            console.log("DELETED FAVORITE",deletedFavorite)
-            }
-            let newFavorite = await Favorite.create({user:user._id, place:placeId})
-            console.log("THIS IS NEW FAVORITE", newFavorite)   
-            
-            res.json(newFavorite)
-    } catch (error) {
-        console.log(error)
-    }   
-    }),
     
+router.post("/favorite/:placeId", isAuthenticated, async  (req,res) => {
+    const place = req.params
+    const placeId = place.placeId
+    const user = req.payload
+    try{
+        let favoritesDB = await Favorite.find({place:placeId, user:user._id})
+        if(favoritesDB){
+           const deletedFavorite= await Favorite.findOneAndDelete({place:placeId, user:user._id})
+        console.log("DELETED FAVORITE",deletedFavorite)
+        }
+        let newFavorite = await Favorite.create({user:user._id, place:placeId})
+        console.log("TIS IS NEW FAVORITE", newFavorite)   
+        
+        res.json(newFavorite)
+} catch (error) {
+    console.log(error)
+}   
+}),
+
 module.exports = router;
