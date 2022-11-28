@@ -78,6 +78,20 @@ router.put("/places/:placeId", isAuthenticated, async (req, res) => {
     }
 })
 
+//% VAlidacion:
+
+router.get("/places/:placeId/reviews", isAuthenticated, async (req, res) => {
+    const { placeId } = req.params
+    try {
+        console.log("searching reviews of places ID", placeId)
+        const reviewsByPlace = await Review.find({place: placeId })
+        res.json(reviewsByPlace)
+  
+    } catch (error) {
+        res.json(error)
+    }
+})
+
 router.delete("/places/:placeId", isAuthenticated, async (req, res) => {
     const { placeId } = req.params
     try {
@@ -148,7 +162,7 @@ router.post("/addReview/:placeId", isAuthenticated, async (req, res) => {
 })
 
     
-router.post("/favorite/:placeId", isAuthenticated, async  (req,res) => {
+router.post("/favorite/:placeId", async  (req,res) => {
     const place = req.params
     const placeId = place.placeId
     const user = req.payload
@@ -160,11 +174,12 @@ router.post("/favorite/:placeId", isAuthenticated, async  (req,res) => {
         }
         let newFavorite = await Favorite.create({user:user._id, place:placeId})
         console.log("TIS IS NEW FAVORITE", newFavorite)   
-        
+        isAuthenticated
         res.json(newFavorite)
 } catch (error) {
     console.log(error)
 }   
 }),
+
 
 module.exports = router;
