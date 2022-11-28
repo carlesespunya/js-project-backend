@@ -11,7 +11,10 @@ router.get("/user-profile/:userId", async (req, res) => {
 
     try {
 
-        const userProfile = await User.findById(userId).populate("createdPlaceId")
+        const userProfile = await User.findById(userId).populate(
+          "createdPlaceId",
+          "pet"
+        );
 
         res.json(userProfile)
     } catch (error) {
@@ -37,9 +40,10 @@ router.get("/profile", isAuthenticated, async (req, res, next) => {
     const currentUser = req.payload
     try{
 
+        const thisUser = await User.findById(currentUser._id).populate("createdPlaceId pet")
+        console.log(thisUser)
+        res.json(thisUser);
 
-        const thisUser = await User.findById(currentUser._id).populate("createdPlaceId")
-        res.json(thisUser.createdPlaceId);
 
     } catch(err){
         console.log(err)

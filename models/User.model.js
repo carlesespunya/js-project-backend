@@ -36,7 +36,7 @@ const userSchema = new Schema(
       type: Schema.Types.ObjectId, ref: "Favorite",
     },
     pet: 
-      { type: Schema.Types.ObjectId, ref: "Pet"},
+      [{ type: Schema.Types.ObjectId, ref: "Pet"}],
   },
   {
     // this second object adds extra properties: `createdAt` and `updatedAt`
