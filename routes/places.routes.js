@@ -11,7 +11,6 @@ const { json } = require("express");
 const Favorite = require("../models/Favorite");
 
 
-
 router.post("/addPlace", isAuthenticated, fileUploader.array('pictures'), async (req, res) => {
     const { name, address, description, type, socialMedia, typeOther } = req.body;
     const pictures = []
@@ -117,13 +116,27 @@ router.post("/addReview/:placeId", isAuthenticated, async (req, res) => {
     try {
         const userSaved = await User.findById(req.payload._id)
         const placeSaved = await Place.findById(req.params.placeId)
-        const review = {
-            check: body.check,
-            comment: body.comment,
-            place: placeSaved,
-            user: userSaved
+        const reviewFind = await Review.find({user: req.payload._id, place: req.params.placeId })
+        let review = {}
+        if (!reviewFind) {
+            return
         }
 
+        if (req.body.comment){
+            review = {
+                check: req.body.check,
+                comment: req.body.comment,
+                place: placeSaved,
+                user: userSaved
+            }
+        }else {
+            review = {
+                check: req.body.check,
+                place: placeSaved,
+                user: userSaved
+            }
+        }
+       
         const newReview = await Review.create(review)
         await Place.findByIdAndUpdate(req.params.placeId, { $push: { Review: newReview._id } });
         await User.findByIdAndUpdate(req.payload._id, { $push: { reviewId: newReview._id } });
