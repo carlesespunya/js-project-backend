@@ -43,5 +43,22 @@ router.put("/pet-profile/add-photo", fileUploader.single('image'), isAuthenticat
         console.log(error)
     }
 })
+router.delete("/pet-profile/:petId", isAuthenticated, async (req, res) => {
+    const { petId } = req.params
+    try{
+        const userDel = await User.findByIdAndUpdate(req.payload._id, {$pull: { pet: petId }
+        });
+        const petDb = await Pet.findByIdAndDelete(petId)
+        const ressponse = {
+            userDel: userDel,
+            petDb: petDb,
+        }
+        res.json(ressponse)
+    }   
+    catch (err) {
+        res.json(err)
+    }
+})
+
 
 module.exports = router
