@@ -162,7 +162,7 @@ router.post("/addReview/:placeId", isAuthenticated, async (req, res) => {
 })
 
     
-router.post("/favorite/:placeId", async  (req,res) => {
+router.post("/favorite/:placeId", isAuthenticated, async  (req,res) => {
     const place = req.params
     const placeId = place.placeId
     const user = req.payload
