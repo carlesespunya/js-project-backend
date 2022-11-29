@@ -63,16 +63,10 @@ router.get("/places/:placeId", async (req, res) => {
 
 router.put("/places/:placeId", isAuthenticated, async (req, res) => {
     const { placeId } = req.params
-    const { placeUpdate } = req.body
+    const  placeUpdate  = req.body
     try {
-        const placeDb = await Place.findById(placeId)
-        if (placeDb.User._id === req.payload._id) {
             const placeUpdatedDB = await Place.findByIdAndUpdate(placeId, placeUpdate)
             res.json(placeUpdatedDB)
-        } else {
-            res.json("You can not update this place")
-        }
-
     } catch (error) {
         res.json(error)
     }
@@ -95,17 +89,18 @@ router.get("/places/:placeId/reviews", isAuthenticated, async (req, res) => {
 router.delete("/places/:placeId", isAuthenticated, async (req, res) => {
     const { placeId } = req.params
     try {
-        const placeDb = await Place.findById(placeId)
-        if (placeDb.User._id === req.payload._id) {
-            const placeDeleted = await Project.findByIdAndRemove(placeId)
-            res.json({ message: `project with id ${placeDeleted._id} was deleted` })
-        } else {
-            res.json("You can not delete this place")
+        const userDel = await User.findByIdAndUpdate(req.payload._id, {$pull: {createdPlaceId: placeId}})
+        const placeDeleted = await Place.findByIdAndDelete(placeId)
+        const ressponse = {
+            userDel: userDel,
+            placeDeleted: placeDeleted
         }
+        res.json(ressponse)
     } catch (error) {
         res.json(error)
     }
 })
+
 
 
 router.get("/map", isAuthenticated, async (req, res) => {

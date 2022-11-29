@@ -12,8 +12,7 @@ router.get("/user-profile/:userId", async (req, res) => {
     try {
 
         const userProfile = await User.findById(userId).populate(
-          "createdPlaceId",
-          "pet"
+          "createdPlaceId pet"
         );
 
         res.json(userProfile)
