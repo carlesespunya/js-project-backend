@@ -107,7 +107,6 @@ router.get("/map", isAuthenticated, async (req, res) => {
   
 
 
-
 router.get("/addReview/:placeId", isAuthenticated, (req, res) => {
     res.json(req.params.placeId)
 });
