@@ -5,12 +5,9 @@ const User = require("../models/User.model")
 const Place = require("../models/Place.model")
 const Review = require("../models/Review.model")
 const mongoose = require("mongoose");
-
 const { isAuthenticated } = require("../middleware/jwt.middleware.js");
 const { json } = require("express");
 const Favorite = require("../models/Favorite");
-
-
 router.post("/addPlace", isAuthenticated, fileUploader.array('pictures'), async (req, res) => {
     const { name, address, description, type, socialMedia, typeOther } = req.body;
     const pictures = []
@@ -21,12 +18,10 @@ router.post("/addPlace", isAuthenticated, fileUploader.array('pictures'), async 
             pictures.push(file.path)
         })
     }
-
     try {
         const newPlace = await Place.create({ name, address, description, pictures, type, socialMedia, User: req.payload._id, typeOthers: typeOther })
         const userUpdated = await User.findByIdAndUpdate(req.payload._id, { $push: { createdPlaceId: newPlace._id } })
         res.json(newPlace)
-
     } catch (err) {
         if (err instanceof mongoose.Error.ValidationError) {
             res.status(500).json({ errorMessage: err.message, layout: false });
@@ -41,7 +36,6 @@ router.post("/addPlace", isAuthenticated, fileUploader.array('pictures'), async 
         }
     }
 })
-
 router.get("/places", async (req, res) => {
     try {
         const placeDB = await Place.find()
@@ -50,7 +44,6 @@ router.get("/places", async (req, res) => {
         res.json(error)
     }
 })
-
 router.get("/places/:placeId", async (req, res) => {
     const { placeId } = req.params
     try {
@@ -80,9 +73,7 @@ router.put("/places/:placeId", fileUploader.array('pictures'), isAuthenticated, 
         res.json(error)
     }
 })
-
 //% VAlidacion:
-
 router.get("/places/:placeId/reviews", isAuthenticated, async (req, res) => {
     const { placeId } = req.params
     try {
@@ -94,7 +85,6 @@ router.get("/places/:placeId/reviews", isAuthenticated, async (req, res) => {
         res.json(error)
     }
 })
-
 router.delete("/places/:placeId", isAuthenticated, async (req, res) => {
     const { placeId } = req.params
     try {
@@ -109,9 +99,6 @@ router.delete("/places/:placeId", isAuthenticated, async (req, res) => {
         res.json(error)
     }
 })
-
-
-
 router.get("/map", isAuthenticated, async (req, res) => {
     try {
         const spotsDb = await Place.find()
@@ -123,12 +110,9 @@ router.get("/map", isAuthenticated, async (req, res) => {
     }
 });
 
-
-
 router.get("/addReview/:placeId", isAuthenticated, (req, res) => {
     res.json(req.params.placeId)
 });
-
 router.post("/addReview/:placeId", isAuthenticated, async (req, res) => {
     try {
         const userSaved = await User.findById(req.payload._id)
@@ -158,12 +142,10 @@ router.post("/addReview/:placeId", isAuthenticated, async (req, res) => {
         await Place.findByIdAndUpdate(req.params.placeId, { $push: { Review: newReview._id } });
         await User.findByIdAndUpdate(req.payload._id, { $push: { reviewId: newReview._id } });
         res.json(newReview)
-
     } catch (err) {
         console.log(err)
     }
 })
-
 
 router.post("/favorite/:placeId", isAuthenticated, async (req, res) => {
     const place = req.params
@@ -183,6 +165,5 @@ router.post("/favorite/:placeId", isAuthenticated, async (req, res) => {
         console.log(error)
     }
 }),
-
 
     module.exports = router;
