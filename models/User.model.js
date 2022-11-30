@@ -29,6 +29,12 @@ const userSchema = new Schema(
       type: String,
       default: ""
     },
+    resetPasswordToken:{
+
+    },
+    resetPasswordExpires:{
+
+    },
     reviewId:
       [{ type: Schema.Types.ObjectId, ref: 'Review' }],
 
