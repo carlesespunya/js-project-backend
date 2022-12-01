@@ -63,10 +63,10 @@ router.post("/signup", (req, res, next) => {
     .then((createdUser) => {
       // Deconstruct the newly created user object to omit the password
       // We should never expose passwords publicly
-      const { email, name, _id } = createdUser;
+      const { email, name, _id, favoriteEvent, favoriteClass, favoriteSale } = createdUser;
 
       // Create a new object that doesn't expose the password
-      const user = { email, name, _id };
+      const user = { email, name, _id, favoriteEvent };
 
       // Send a json response containing the user object
       res.status(201).json({ user: user });
@@ -98,10 +98,10 @@ router.post("/login", (req, res, next) => {
 
       if (passwordCorrect) {
         // Deconstruct the user object to omit the password
-        const { _id, email, name } = foundUser;
+        const { _id, email, name, favoriteEvent, favoriteClass, favoriteSale } = foundUser;
 
         // Create an object that will be set as the token payload
-        const payload = { _id, email, name };
+        const payload = { _id, email, name, favoriteEvent, favoriteClass, favoriteSale};
 
         // Create a JSON Web Token and sign it
         const authToken = jwt.sign(payload, process.env.TOKEN_SECRET, {
@@ -118,7 +118,7 @@ router.post("/login", (req, res, next) => {
     .catch((err) => next(err)); // In this case, we send error handling to the error handling middleware.
 });
 
-// GET  /auth/verify  -  Used to verify JWT stored on the client
+// GET  /auth/fy  -  Used to verify JWT stored on the client
 router.get("/verify", isAuthenticated, (req, res, next) => {
   // If JWT token is valid the payload gets decoded by the
   // isAuthenticated middleware and is made available on `req.payload`
